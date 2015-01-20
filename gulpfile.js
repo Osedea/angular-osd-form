@@ -12,7 +12,7 @@ var gulp = require('gulp'),
 
 var paths = {
     js: [
-        './*.js',
+        './angular-osd-form.js',
     ],
 };
 
