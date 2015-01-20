@@ -169,7 +169,9 @@
                 attr: '@',
             },
 
-            templateUrl: '/partials/directives/forms/osd-field.html',
+            template:   '<div class="form-group" ng-class="{ \'has-error\': showError() }">' +
+                            '<div ng-transclude></div>' +
+                        '</div>',
 
             require: '^osdSubmit',
 
@@ -201,7 +203,7 @@
                 validator: '&',
             },
 
-            templateUrl: '/partials/directives/forms/osd-error.html',
+            template: '<span class="help-block" ng-show="showError()">{{ msg }}</span>',
 
             require: [
                 '^osdField',
