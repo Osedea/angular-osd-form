@@ -1,11 +1,11 @@
 {
-  "name": "osd-form",
+  "name": "angular-osd-form",
   "version": "0.0.0",
   "authors": [
     "angus.macisaac@osedea.com"
   ],
   "description": "Angular form validator",
-  "main": "./osd-form.js",
+  "main": "./angular-osd-form.js",
   "keywords": [
     "angular",
     "form"

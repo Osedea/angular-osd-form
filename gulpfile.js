@@ -22,7 +22,7 @@ gulp.task('build', ['js']);
 
 gulp.task('js', function() {
     return gulp.src(paths.js)
-        .pipe(concat('osd-form.min.js'))
+        .pipe(concat('angular-osd-form.min.js'))
         .pipe(ngAnnotate())
         .pipe(uglify())
         .pipe(gulp.dest('./'))
