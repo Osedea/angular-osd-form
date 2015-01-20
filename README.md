@@ -7,7 +7,7 @@ This modules provides easy form validation in AngularJS. The module provides thr
   - osd-error
 
 ### Version
-0.0.0
+0.1.0
 
 ### Installation
 
