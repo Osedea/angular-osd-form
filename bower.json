@@ -1,0 +1,24 @@
+{
+  "name": "osd-form",
+  "version": "0.0.0",
+  "authors": [
+    "angus.macisaac@osedea.com"
+  ],
+  "description": "Angular form validator",
+  "main": "./osd-form.js",
+  "keywords": [
+    "angular",
+    "form"
+  ],
+  "dependencies": {
+      "angular": ">=1"
+  },
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
