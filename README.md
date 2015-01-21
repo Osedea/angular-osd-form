@@ -2,9 +2,9 @@
 
 This modules provides easy form validation in AngularJS. There are three directives included in the module:
 
-  - osd-submit (accepts a function to be called if validation passes)
-  - osd-field (accepts a name attribute and adds error messages if field is invalid)
-  - osd-error (
+  - osd-submit (accepts a function to be called after a valid form is submitted)
+  - osd-field (adds error classes when an invalid form is submitted)
+  - osd-error (accepts validator functions that will be run during for validation)
 
 ### Version
 0.1.0
@@ -64,9 +64,6 @@ Here is an example of a registration form to be validated using angular-osd-form
     <button type="submit" class="btn">Continue</button>
 </form>
 ```
-
-### Todo's
-TODO
 
 ### License
 MIT
