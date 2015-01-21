@@ -1,10 +1,10 @@
 # angular-osd-form
 
-This modules provides easy form validation in AngularJS. There are three directives included in the module:
+This module provides easy form validation in AngularJS. There are three directives included in the module:
 
-  - osd-submit (accepts a function to be called after a valid form is submitted)
-  - osd-field (adds error classes when an invalid form is submitted)
-  - osd-error (accepts validator functions that will be run during for validation)
+  - osd-submit (calls a given function if validation passes)
+  - osd-field (adds an error class if field is invalid)
+  - osd-error (displayd error messages for invalid fields)
 
 ### Version
 0.1.0
@@ -18,29 +18,21 @@ $ bower install angular-osd-form
 
 ### Example
 
-Here is an example of a registration form to be validated using angular-osd-form:
+A registration form to be validated using angular-osd-form:
 
 ```html
-<form role="form" name="regForm" osd-submit="userCtrl.register(userCtrl.currentUser)" novalidate>
-    <osd-field attr="firstName">
-        <label class="control-label">First Name</label>
-        <input type="text" class="form-control" name="firstName"
-               ng-model="userCtrl.currentUser.firstName" required="required">
-        <osd-error msg="First name required"></osd-error>
-    </osd-field>
-
-    <osd-field attr="lastName">
-        <label class="control-label">Last Name</label>
-        <input type="text" class="form-control" name="lastName"
-               ng-model="userCtrl.currentUser.lastName" required="required">
-        <osd-error msg="Last name required"></osd-error>
+<form role="form" name="regForm" osd-submit="userCtrl.register()" novalidate>
+    <osd-field attr="name">
+        <label class="control-label">Name</label>
+        <input type="text" class="form-control" name="name"
+               ng-model="userCtrl.currentUser.name" required="required">
+        <osd-error msg="Name required"></osd-error>
     </osd-field>
 
     <osd-field attr="email">
         <label class="control-label">Email</label>
         <input type="email" class="form-control" name="email"
-               ng-model="userCtrl.currentUser.email" required="required"
-               ng-change="userCtrl.setEmail(userCtrl.currentUser.email)">
+               ng-model="userCtrl.currentUser.email" required="required">
         <osd-error msg="Email required"></osd-error>
         <osd-error error-type="email" msg="Email must be valid"></osd-error>
         <osd-error validator="userCtrl.asyncEmailValidator()" msg="Email already taken"></osd-error>
@@ -65,6 +57,77 @@ Here is an example of a registration form to be validated using angular-osd-form
 </form>
 ```
 
+### osd-submit
+The osd-submit directive validates all fields and calls the given function if the form is valid. Validation only occurs when the form is submitted. A name attribute must be provided along witht the osd-submit directive.
+
+```js
+<form role="form" name="regForm" osd-submit="userCtrl.register()" novalidate>
+```
+
+If any field is invalid on submission, an event will be broadcasted on $rootScope, passing the Angular FormController:
+
+```js
+    $rootScope.$broadcast('osdInvalid', ngFormCtrl);
+```
+
+Validation can be forced using the 'osdValidate' event:
+```js
+    $scope.$broadcast('osdValidate');
+```
+
+The form validation status can be reset with the 'osdReset' event:
+```js
+    $scope.$broadcast('osdReset');
+```
+
+### osd-field
+Defines the name of the field that will be validated and adds an error class if the field is invalid. There must be a form field with the same name, and an ng-model directive.
+
+```js
+<osd-field attr="fieldToValidate">
+    <input type="text" name="fieldToValidate" ng-model="fields.fieldToValidate" required="required"/>
+</osd-field>
+```
+
+### osd-error
+Accepts an error type, an error message, and an optional validator function. The error types are the same as those provided by Angular's FormController, with 'required' being the default. See https://docs.angularjs.org/api/ng/type/form.FormController for information on the available error types.
+
+```js
+<osd-error error-type="email" msg="Email must be valid"></osd-error>
+```
+
+If a validator is given the error-type is not required:
+
+```js
+<osd-error validator="userCtrl.passwordsMatchValidator()" msg="Passwords do not match"></osd-error>
+```
+
+
+
+
+
 ### License
-MIT
+
+The MIT License (MIT)
+
+Copyright (c) 2015 damacisaac
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
 
