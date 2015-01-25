@@ -11,7 +11,7 @@ This module provides easy form validation in AngularJS. There are three directiv
 
 ### Installation
 
-This package can be install using bower:
+This package can be installed using bower:
 ```sh
 $ bower install angular-osd-form
 ```
@@ -96,7 +96,7 @@ Accepts an error type, an error message, and an optional validator function. The
 <osd-error error-type="email" msg="Email must be valid"></osd-error>
 ```
 
-If a validator is given the error-type is not required:
+If a validator is given, the error-type is not required:
 
 ```js
 <osd-error validator="userCtrl.passwordsMatchValidator()" msg="Passwords do not match"></osd-error>
