@@ -9,11 +9,28 @@ This module provides easy form validation in AngularJS. There are three directiv
 ### Version
 0.1.0
 
-### Installation
+### Installation and Setup
 
 This package can be installed using bower:
 ```sh
 $ bower install angular-osd-form
+```
+
+Add the module to your app's module list:
+
+```js
+angular.module(
+            'app',
+            [
+                ...,
+                'osdForm',
+            ]
+    )
+```
+
+Include a script tag (or add it to whatever you use to compile your js):
+```html
+<script src="path/to/bower_components/angular-osd-form/angular-osd-form.min.js"></script>
 ```
 
 ### Example
