@@ -152,6 +152,7 @@
                             }
 
                             scope.osdSubmit();
+                            scope.$apply();
                         });
                     }
                 };
