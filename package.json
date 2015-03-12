@@ -17,7 +17,7 @@
     "gulp-ng-annotate": "^0.3.2",
     "gulp-rename": "^1.2.0",
     "gulp-uglify": "~0.3.1",
-    "gulp-util": "~2.2.17"
+    "gulp-util": "~2.2.17",
+    "karma": "~0.12.31"
   }
 }
-
