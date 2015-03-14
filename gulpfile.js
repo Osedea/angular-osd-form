@@ -49,7 +49,7 @@ gulp.task('test', function() {
     return gulp.src(paths.test)
         .pipe(karma({
             configFile: 'karma.conf.js',
-            action: 'watch'
+            action: 'run'
         }))
         .on('error', function(err) {
             throw err;
