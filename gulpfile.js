@@ -3,12 +3,12 @@ var gulp = require('gulp'),
     clean = require('gulp-clean'),
     uglify = require('gulp-uglify'),
     concat = require('gulp-concat'),
-    cache = require('gulp-cache'),
     rename = require('gulp-rename'),
     argv = require('yargs').argv,
     ngAnnotate = require('gulp-ng-annotate'),
-    karma = require('gulp-karma'),
-    es = require('event-stream');
+    karma = require('gulp-karma');
+
+var isTravis = process.env.TRAVIS || false;
 
 var paths = {
     js: [
@@ -48,7 +48,8 @@ gulp.task('test', function() {
     return gulp.src(paths.test)
         .pipe(karma({
             configFile: 'karma.conf.js',
-            action: 'run'
+            action: isTravis ? 'run' : 'watch',
+            singleRun: isTravis,
         }))
         .on('error', function(err) {
             throw err;
