@@ -1,4 +1,5 @@
 {
+  "repository": "https://github.com/Osedea/angular-osd-form",
   "name": "angular-osd-form",
   "version": "0.1.2",
   "private": true,
