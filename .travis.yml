@@ -3,12 +3,10 @@ node_js:
   - 0.12
 script: gulp test
 before_script:
-  - npm install -g bower
   - npm install -g gulp
   - npm install -g karma
   - npm install phantomjs
   - npm install
-  - bower install
   - gulp build
 
 
