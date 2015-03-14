@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Osedea/angular-osd-form.svg?branch=master)](https://travis-ci.org/Osedea/angular-osd-form)
+
 # angular-osd-form
 
 This module provides easy form validation in AngularJS. There are three directives included in the module:
