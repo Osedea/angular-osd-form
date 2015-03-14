@@ -38,7 +38,7 @@
 
         /**
          * Adds a validator to the list of validators.
-         * Validators can be added through the 'validator' attribute
+         * Validators can also be added through the 'validator' attribute
          * in the osdError directive.
          *
          * @param attr
@@ -109,7 +109,11 @@
         self.setNgFormCtrl = function (ctrl) {
             ngFormCtrl = ctrl;
         };
-    };
+
+        self.getNgFormCtrl = function (ctrl) {
+            return ngFormCtrl;
+        };
+    }
 
     function osdSubmit() {
         return {
@@ -155,7 +159,7 @@
                             }
 
                             scope.osdSubmit();
-                            scope.$apply();
+                            if (!scope.$$phase) scope.$apply();
                         });
                     }
                 };

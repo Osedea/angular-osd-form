@@ -13,6 +13,20 @@ describe('Angular OSD Form: ', function() {
         });
     }));
 
+    it('can set attempted', function() {
+        $ctrl.setAttempted(true);
+
+        expect($ctrl.attempted).toBe(true);
+    });
+
+    it('can set ngFormCtrl', function() {
+        var ngFormCtrl = { fake: "test" };
+
+        $ctrl.setNgFormCtrl(ngFormCtrl);
+
+        expect($ctrl.getNgFormCtrl()).toBe(ngFormCtrl);
+    });
+
     it('emits an event when onInvalid is called', function() {
         spyOn($rootScope, '$broadcast');
 
@@ -39,5 +53,15 @@ describe('Angular OSD Form: ', function() {
         $rootScope.$broadcast('osdValidate');
 
         expect($ctrl.validateForm).toHaveBeenCalled();
+    });
+
+    it('adds a validator when one is passed to the addValidator function', function() {
+        var attr = "fakeAttr";
+        var validator = function() { return true; };
+
+        $ctrl.addFieldValidator(attr, validator);
+
+        expect($ctrl.validators[0].attr).toBe(attr);
+        expect($ctrl.validators[0].fn).toBe(validator);
     });
 });
