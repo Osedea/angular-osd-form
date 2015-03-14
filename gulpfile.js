@@ -17,7 +17,6 @@ var paths = {
     test: [
         'node_modules/angular/angular.js',
         'node_modules/angular-mocks/angular-mocks.js',
-        'node_modules/angular/angular.min.js',
         'angular-osd-form.js',
         './test/**/*.js',
     ]

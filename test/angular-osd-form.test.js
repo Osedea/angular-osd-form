@@ -38,6 +38,6 @@ describe('Angular OSD Form: ', function() {
 
         $rootScope.$broadcast('osdValidate');
 
-        expect($ctrl.validateForm).toHaveBeenCalledWith('osdInvalid', ngFormCtrl);
+        expect($ctrl.validateForm).toHaveBeenCalled();
     });
 });
