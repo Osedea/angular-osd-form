@@ -45,7 +45,10 @@
          * @param validator
          */
         self.addFieldValidator = function (attr, validator) {
-            self.validators.push({attr: attr, fn: validator});
+            if (ngFormCtrl[attr]) {
+                ngFormCtrl[attr].$error.validator = false;
+                self.validators.push({attr: attr, fn: validator});
+            }
         };
 
         /**
@@ -60,7 +63,6 @@
             self.validators.forEach(function (validator) {
                 if (!validator.fn({key: validator.attr})) {
                     ngFormCtrl[validator.attr].$error.validator = true;
-
                     result = false;
                 }
             });
@@ -71,7 +73,7 @@
         /**
          * Checks if an error should be displayed for a specific field.
          * Errors will only display when a submission has been attempted.
-         * Checks if either a 'validator' fails, or if a basic form
+         * Checks if either a validator fails, or if an angular form
          * validation fails.
          *
          * @param attr
@@ -79,8 +81,20 @@
          * @returns {boolean}
          */
         self.fieldShowsError = function (attr, errorType) {
-            if (!self.attempted || (errorType && !ngFormCtrl[attr].$error[errorType])) return false;
 
+            // If submit has not been attempted, don't show an error
+            if (!self.attempted) {
+                return false;
+            }
+
+            // If an error type is passed and the field does not have
+            // an error of that type, don't show an error
+            if (errorType && !ngFormCtrl[attr].$error[errorType]) {
+                return false;
+            }
+
+            // Loop through validators and check for matching attribute. If
+            // attribute matches, check if validator passes.
             var validatorFailed = self.validators.some(function (validator) {
                 if (validator.attr !== attr) return false;
 
@@ -110,7 +124,7 @@
             ngFormCtrl = ctrl;
         };
 
-        self.getNgFormCtrl = function (ctrl) {
+        self.getNgFormCtrl = function () {
             return ngFormCtrl;
         };
     }
@@ -145,7 +159,6 @@
 
                     post: function (scope, formElement, attrs, ctrls) {
                         var submitCtrl = ctrls[0];
-                        var formCtrl = ctrls[1];
 
                         formElement.bind('submit', function (event) {
                             submitCtrl.setAttempted(true);
@@ -174,12 +187,13 @@
             transclude: true,
 
             scope: {
-                attr: '@',
+                attr: '@'
             },
 
-            template: '<div class="form-group" ng-class="{ \'has-error\': showError() }">' +
-            '<div ng-transclude></div>' +
-            '</div>',
+            template:
+                '<div class="form-group" ng-class="{ \'has-error\': showError() }">' +
+                    '<div ng-transclude></div>' +
+                '</div>',
 
             require: '^osdSubmit',
 
@@ -195,17 +209,19 @@
                 $scope.showError = function () {
                     return $ctrl.fieldShowsError($scope.attr, $scope.type);
                 };
-            },
+            }
         };
     }
 
-    function osdError() {
+    // @ngInject
+    function osdError(osdValidators) {
         return {
             restrict: 'E',
             replace: true,
 
             scope: {
                 attr: '@',
+                attrs: '=',
                 errorType: '@',
                 msg: '@',
                 validator: '&'
@@ -216,18 +232,28 @@
             require: [
                 '^osdField',
                 '^osdSubmit',
+                '^?form'
             ],
 
             link: function ($scope, $element, $attrs, $ctrl) {
                 var fieldCtrl = $ctrl[0];
                 var submitCtrl = $ctrl[1];
+                var ngFormCtrl = $ctrl[2];
 
-                // Create vars so they aren't cleared during $digest
+                // Copy values so they aren't cleared during $digest
+                // and set default values
                 var attr = $scope.attr || fieldCtrl.getAttr();
                 var type = $scope.errorType || 'required';
 
                 if ($attrs.validator) {
+                    var validatorName = $attrs.validator.replace('()', '');
+
+                    if (osdValidators.isBuiltInValidator(validatorName)) {
+                        $scope.validator = osdValidators[validatorName](ngFormCtrl, $scope.attrs);
+                    }
+
                     submitCtrl.addFieldValidator(attr, $scope.validator);
+
                     type = 'validator';
                 }
 
@@ -238,8 +264,28 @@
         };
     }
 
+    // @ngInject
+    function osdValidators() {
+        var self = this;
+
+        self.isBuiltInValidator = function(name) {
+            return self.hasOwnProperty(name);
+        };
+
+        self.strictMatchValidator = function(ngFormCtrl, attrs) {
+            return function() {
+                return attrs.every(function(a) {
+                    return ngFormCtrl[a].$viewValue === ngFormCtrl[attrs[0]].$viewValue;
+                });
+            }
+        };
+
+        return self;
+    }
+
     angular.module('osdForm', [])
         .controller('OsdSubmitCtrl', OsdSubmitCtrl)
+        .service('osdValidators', osdValidators)
         .directive('osdError', osdError)
         .directive('osdField', osdField)
         .directive('osdSubmit', osdSubmit);
