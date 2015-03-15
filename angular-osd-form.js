@@ -278,7 +278,7 @@
                 return attrs.every(function (a) {
                     return ngFormCtrl[a].$viewValue === ngFormCtrl[attrs[0]].$viewValue;
                 });
-            }
+            };
         };
 
         // Returns true if the list of attributes are sorted in increasing order
@@ -291,7 +291,7 @@
                 }
 
                 return true;
-            }
+            };
         };
 
         return self;

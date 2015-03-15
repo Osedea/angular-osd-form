@@ -6,7 +6,7 @@ This module provides easy form validation in AngularJS. There are three directiv
 
   - osd-submit (calls a given function if validation passes)
   - osd-field (adds an error class if field is invalid)
-  - osd-error (displayd error messages for invalid fields)
+  - osd-error (displays error messages for invalid fields)
 
 ### Version
 0.1.0
@@ -121,6 +121,18 @@ If a validator is given, the error-type is not required:
 <osd-error validator="userCtrl.passwordsMatchValidator()" msg="Passwords do not match"></osd-error>
 ```
 
+### Multi-field validators
+The osdError directive comes with several multi-field validators. These can be used to validate based on multiple fields in your form. The osdError directive accepts a built-in validator name and an array of attributes to check. The most common example is checking that the password confirmation field matches the password field:
+
+```js
+<osd-error validator="strictMatchValidator()" attrs="['password', 'passwordConfirmation']" msg="Passwords do not match"></osd-error>
+```
+
+In the example above, the validator will check that the password and passwordConfirmation fields are strictly equal.
+
+The following mult-field validators are available:
+ - strictMatchValidator()
+ - strictIncreaseValidator()
 
 
 
