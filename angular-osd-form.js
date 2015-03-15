@@ -190,10 +190,9 @@
                 attr: '@'
             },
 
-            template:
-                '<div class="form-group" ng-class="{ \'has-error\': showError() }">' +
-                    '<div ng-transclude></div>' +
-                '</div>',
+            template: '<div class="form-group" ng-class="{ \'has-error\': showError() }">' +
+            '<div ng-transclude></div>' +
+            '</div>',
 
             require: '^osdSubmit',
 
@@ -268,15 +267,30 @@
     function osdValidators() {
         var self = this;
 
-        self.isBuiltInValidator = function(name) {
+        // Returns true if name is a validator defined on osdValidators
+        self.isBuiltInValidator = function (name) {
             return self.hasOwnProperty(name);
         };
 
-        self.strictMatchValidator = function(ngFormCtrl, attrs) {
-            return function() {
-                return attrs.every(function(a) {
+        // Returns true if the list of attributes are all strictly equal
+        self.strictMatchValidator = function (ngFormCtrl, attrs) {
+            return function () {
+                return attrs.every(function (a) {
                     return ngFormCtrl[a].$viewValue === ngFormCtrl[attrs[0]].$viewValue;
                 });
+            }
+        };
+
+        // Returns true if the list of attributes are sorted in increasing order
+        self.strictIncreaseValidator = function (ngFormCtrl, attrs) {
+            return function () {
+                for (var i = 1; i < attrs.length; i++) {
+                    if (ngFormCtrl[attrs[i]].$viewValue <= ngFormCtrl[attrs[i - 1]].$viewValue) {
+                        return false;
+                    }
+                }
+
+                return true;
             }
         };
 

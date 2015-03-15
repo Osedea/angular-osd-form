@@ -17,14 +17,20 @@ describe('osdValidators: ', function () {
         $element =
             '<form name="osdForm" osd-submit="">' +
                 '<osd-field attr="firstName">' +
-                    '<label for="firstName">First Name</label>' +
                     '<input name="firstName" ng-model="firstName" required/>'+
                     '<osd-error msg="First name required"></osd-error>' +
                 '</osd-field>' +
                 '<osd-field attr="lastName">' +
-                    '<label for="lastName">Last Name</label>' +
                     '<input name="lastName" ng-model="lastName" required/>'+
-                    '<osd-error validator="strictMatchValidator()" attrs="[\'firstName\', \'lastName\']" msg="Fields did not match"></osd-error>' +
+                    '<osd-error validator="strictMatchValidator()" attrs="[\'firstName\', \'lastName\']" msg=""></osd-error>' +
+                '</osd-field>' +
+                '<osd-field attr="countOne">' +
+                    '<input name="countOne" ng-model="countOne"/>'+
+                    '<osd-error msg="First name required"></osd-error>' +
+                '</osd-field>' +
+                    '<osd-field attr="countTwo">' +
+                    '<input name="countTwo" ng-model="countTwo" required/>'+
+                    '<osd-error validator="strictIncreaseValidator" attrs="[\'countOne\', \'countTwo\']" msg=""></osd-error>' +
                 '</osd-field>' +
             '</form>';
 
@@ -35,14 +41,14 @@ describe('osdValidators: ', function () {
         $scope.$digest();
 
         ngFormCtrl = $scope.osdForm;
+
+        $ctrl.setNgFormCtrl(ngFormCtrl);
+        $ctrl.setAttempted(true);
     }));
 
 
     describe('strictMatchValidator: ', function () {
         it('sets validator error to false if the listed attributes are all strictly equal (===)', function () {
-            $ctrl.setNgFormCtrl(ngFormCtrl);
-            $ctrl.setAttempted(true);
-
             $scope.firstName = 'Angus';
             $scope.lastName = 'Angus';
 
@@ -54,9 +60,6 @@ describe('osdValidators: ', function () {
         });
 
         it('sets validator error to true if the listed attributes are not all strictly equal (===)', function () {
-            $ctrl.setNgFormCtrl(ngFormCtrl);
-            $ctrl.setAttempted(true);
-
             $scope.firstName = 'Angus';
             $scope.lastName = 'MacIsaac';
 
@@ -65,6 +68,41 @@ describe('osdValidators: ', function () {
             $rootScope.$broadcast('osdValidate');
 
             expect(ngFormCtrl.lastName.$error.validator).toBe(true);
+        });
+    });
+
+    describe('strictIncreaseValidator: ', function () {
+        it('sets validator error to false if the listed attributes are in strict increasing order', function () {
+            $scope.countOne = 10;
+            $scope.countTwo = 20;
+
+            $scope.$apply();
+
+            $rootScope.$broadcast('osdValidate');
+
+            expect(ngFormCtrl.countTwo.$error.validator).toBe(false);
+        });
+
+        it('sets validator error to true if the listed attributes are not in strict increasing order', function () {
+            $scope.countOne = 20;
+            $scope.countTwo = 10;
+
+            $scope.$apply();
+
+            $rootScope.$broadcast('osdValidate');
+
+            expect(ngFormCtrl.countTwo.$error.validator).toBe(true);
+        });
+
+        it('sets validator error to true if the listed attributes are equal', function () {
+            $scope.countOne = 10;
+            $scope.countTwo = 10;
+
+            $scope.$apply();
+
+            $rootScope.$broadcast('osdValidate');
+
+            expect(ngFormCtrl.countTwo.$error.validator).toBe(true);
         });
     });
 });
