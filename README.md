@@ -121,6 +121,19 @@ If a validator is given, the error-type is not required:
 <osd-error validator="userCtrl.passwordsMatchValidator()" msg="Passwords do not match"></osd-error>
 ```
 
+### Default validators
+The osdError directive comes with several default validators. These can be used in the same way as custom validators:
+
+```js
+<osd-error validator="pastDateValidator()" msg="Date must be in the past"></osd-error>
+```
+
+In the example above, the validator will check that the field value is in the past.
+
+The following default validators are available:
+ - pastDateValidator()
+ - futureDateValidator()
+
 ### Multi-field validators
 The osdError directive comes with several multi-field validators. These can be used to validate based on multiple fields in your form. The osdError directive accepts a built-in validator name and an array of attributes to check. The most common example is checking that the password confirmation field matches the password field:
 
@@ -130,7 +143,7 @@ The osdError directive comes with several multi-field validators. These can be u
 
 In the example above, the validator will check that the password and passwordConfirmation fields are strictly equal.
 
-The following mult-field validators are available:
+The following multi-field validators are available:
  - strictMatchValidator()
  - strictIncreaseValidator()
 
