@@ -87,25 +87,23 @@
                 return false;
             }
 
-            // If an error type is passed and the field does not have
-            // an error of that type, don't show an error
-            if (errorType && !ngFormCtrl[attr].$error[errorType]) {
-                return false;
+            // If an error type is passed and the field has an error of that
+            // type show an error
+            if (errorType && ngFormCtrl[attr].$error[errorType]) {
+                return true;
             }
 
             // Loop through validators and check for matching attribute. If
             // attribute matches, check if validator passes.
-            var validatorFailed = self.validators.some(function (validator) {
+            return self.validators.some(function (validator) {
                 if (validator.attr !== attr) return false;
 
-                var validatorSuccess = validator.fn({key: attr});
+                var validatorSuccess = validator.fn(self.getNgFormCtrl, attr);
 
                 ngFormCtrl[validator.attr].$error.validator = !validatorSuccess;
 
                 return !validatorSuccess;
             });
-
-            return validatorFailed || ngFormCtrl[attr].$invalid;
         };
 
         self.validateForm = function () {
@@ -178,8 +176,33 @@
                 };
             }
         };
+    };
+
+    // @ngInject
+    function OsdFieldCtrl($scope) {
+        var self = this;
+
+        $scope.submitCtrl = null;
+
+        self.errorTypes = [];
+
+        self.getAttr = function () {
+            return $scope.attr;
+        };
+
+        self.addErrorType = function(type) {
+            self.errorTypes.push(type);
+        };
+
+        // Loop through all child osdError directives, checking for errors
+        $scope.showError = function () {
+            return self.errorTypes.some(function(type) {
+                return $scope.submitCtrl.fieldShowsError($scope.attr, type);
+            });
+        };
     }
 
+    // @ngInject
     function osdField() {
         return {
             restrict: 'E',
@@ -195,19 +218,10 @@
             '</div>',
 
             require: '^osdSubmit',
+            controller: 'OsdFieldCtrl',
 
-            controller: ['$scope', function ($scope) {
-                var self = this;
-
-                self.getAttr = function () {
-                    return $scope.attr;
-                };
-            }],
-
-            link: function ($scope, $element, $attrs, $ctrl) {
-                $scope.showError = function () {
-                    return $ctrl.fieldShowsError($scope.attr, $scope.type);
-                };
+            link: function($scope, $elem, $attrs, $ctrl) {
+                $scope.submitCtrl = $ctrl;
             }
         };
     }
@@ -237,24 +251,27 @@
                 var fieldCtrl = $ctrl[0];
                 var submitCtrl = $ctrl[1];
                 var ngFormCtrl = $ctrl[2];
+
                 var attr = $scope.attr || fieldCtrl.getAttr();
                 var type = $scope.errorType || 'required';
-
-                if ($attrs.validator) {
-                    var validatorName = $attrs.validator.replace('()', '');
-
-                    if (osdValidators.isBuiltInValidator(validatorName)) {
-                        $scope.validator = osdValidators[validatorName](ngFormCtrl, attr, $scope.attrs);
-                    }
-
-                    submitCtrl.addFieldValidator(attr, $scope.validator);
-
-                    type = 'validator';
-                }
 
                 $scope.showError = function () {
                     return submitCtrl.fieldShowsError(attr, type);
                 };
+
+                if (!$attrs.validator) {
+                    return fieldCtrl.addErrorType(type);
+                }
+
+                var validatorName = $attrs.validator.replace('()', '');
+
+                type = 'validator';
+
+                if (osdValidators.isBuiltInValidator(validatorName)) {
+                    $scope.validator = osdValidators[validatorName](ngFormCtrl, attr, $scope.attrs);
+                }
+
+                submitCtrl.addFieldValidator(attr, $scope.validator);
             }
         };
     }
@@ -315,6 +332,7 @@
 
     angular.module('osdForm', [])
         .controller('OsdSubmitCtrl', OsdSubmitCtrl)
+        .controller('OsdFieldCtrl', OsdFieldCtrl)
         .service('osdValidators', osdValidators)
         .directive('osdError', osdError)
         .directive('osdField', osdField)
