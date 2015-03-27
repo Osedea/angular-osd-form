@@ -81,16 +81,13 @@
          * @returns {boolean}
          */
         self.fieldShowsError = function (attr, errorType) {
-
             // If submit has not been attempted, don't show an error
             if (!self.attempted) {
                 return false;
             }
 
-            // If an error type is passed and the field has an error of that
-            // type show an error
-            if (errorType && ngFormCtrl[attr].$error[errorType]) {
-                return true;
+            if (errorType !== 'validator') {
+                return (errorType in ngFormCtrl[attr].$error) && ngFormCtrl[attr].$error[errorType];
             }
 
             // Loop through validators and check for matching attribute. If
@@ -266,6 +263,7 @@
                 var validatorName = $attrs.validator.replace('()', '');
 
                 type = 'validator';
+                fieldCtrl.addErrorType(type);
 
                 if (osdValidators.isBuiltInValidator(validatorName)) {
                     $scope.validator = osdValidators[validatorName](ngFormCtrl, attr, $scope.attrs);
