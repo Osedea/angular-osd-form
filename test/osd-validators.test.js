@@ -113,7 +113,7 @@ describe('osdValidators: ', function () {
 
     describe('pastDateValidator: ', function () {
         it('sets validator error to false if the field value is a date in the past', function () {
-            $scope.dateOne = new Date(2000, 0, 1, 0, 0, 0);
+            $scope.dateOne = '2011/01/01';
 
             $scope.$apply();
             $rootScope.$broadcast('osdValidate');
@@ -144,8 +144,7 @@ describe('osdValidators: ', function () {
         });
 
         it('sets validator error to true if the field value is a date in the past', function () {
-            $scope.dateTwo = new Date();
-            $scope.dateTwo.setMinutes($scope.dateTwo.getMinutes() - 1);
+            $scope.dateTwo = '2011/01/01';
 
             $scope.$apply();
             $rootScope.$broadcast('osdValidate');
