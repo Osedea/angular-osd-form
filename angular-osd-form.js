@@ -256,7 +256,7 @@
 
                 $scope.showError = function () {
                     if (type == 'validator') {
-                        return submitCtrl.attempted && validator();
+                        return submitCtrl.attempted && !validator();
                     }
 
                     return submitCtrl.fieldShowsError(attr, type);
