@@ -256,7 +256,7 @@
 
                 $scope.showError = function () {
                     if (type == 'validator') {
-                        return validator();
+                        return submitCtrl.attempted && validator();
                     }
 
                     return submitCtrl.fieldShowsError(attr, type);
@@ -267,8 +267,8 @@
                 }
 
                 type = 'validator';
-                validatorName = $attrs.validator.replace('()', '');
                 fieldCtrl.addErrorType(type);
+                validatorName = $attrs.validator.replace('()', '');
 
                 if (osdValidators.isBuiltInValidator(validatorName)) {
                     validator = osdValidators[validatorName](ngFormCtrl, attr, $scope.attrs);
