@@ -45,10 +45,12 @@
          * @param validator
          */
         self.addFieldValidator = function (attr, validator) {
-            if (ngFormCtrl[attr]) {
-                ngFormCtrl[attr].$error.validator = false;
-                self.validators.push({attr: attr, fn: validator});
+            if(!ngFormCtrl[attr]) {
+                ngFormCtrl[attr] = { $error: {} };
             }
+
+            ngFormCtrl[attr].$error.validator = false;
+            self.validators.push({attr: attr, fn: validator});
         };
 
         /**
@@ -94,8 +96,7 @@
             // attribute matches, check if validator passes.
             return self.validators.some(function (validator) {
                 if (validator.attr !== attr) return false;
-
-                var validatorSuccess = validator.fn(self.getNgFormCtrl, attr);
+                var validatorSuccess = validator.fn({ key: attr });
 
                 ngFormCtrl[validator.attr].$error.validator = !validatorSuccess;
 
@@ -252,15 +253,16 @@
                 var attr = $scope.attr || fieldCtrl.getAttr();
                 var type = $scope.errorType || 'required';
 
-                var validatorName, validator;
+                var validatorName;
 
                 $scope.showError = function () {
                     if (type == 'validator') {
-                        return submitCtrl.attempted && !validator();
+                        return submitCtrl.attempted && !$scope.validator({key: attr });
                     }
 
                     return submitCtrl.fieldShowsError(attr, type);
                 };
+
 
                 if (!$attrs.validator) {
                     return fieldCtrl.addErrorType(type);
@@ -271,10 +273,10 @@
                 validatorName = $attrs.validator.replace('()', '');
 
                 if (osdValidators.isBuiltInValidator(validatorName)) {
-                    validator = osdValidators[validatorName](ngFormCtrl, attr, $scope.attrs);
+                    $scope.validator = osdValidators[validatorName](ngFormCtrl, attr, $scope.attrs);
                 }
 
-                submitCtrl.addFieldValidator(attr, validator);
+                submitCtrl.addFieldValidator(attr, $scope.validator);
             }
         };
     }
