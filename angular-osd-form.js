@@ -252,7 +252,13 @@
                 var attr = $scope.attr || fieldCtrl.getAttr();
                 var type = $scope.errorType || 'required';
 
+                var validatorName, validator;
+
                 $scope.showError = function () {
+                    if (type == 'validator') {
+                        return validator();
+                    }
+
                     return submitCtrl.fieldShowsError(attr, type);
                 };
 
@@ -260,16 +266,15 @@
                     return fieldCtrl.addErrorType(type);
                 }
 
-                var validatorName = $attrs.validator.replace('()', '');
-
                 type = 'validator';
+                validatorName = $attrs.validator.replace('()', '');
                 fieldCtrl.addErrorType(type);
 
                 if (osdValidators.isBuiltInValidator(validatorName)) {
-                    $scope.validator = osdValidators[validatorName](ngFormCtrl, attr, $scope.attrs);
+                    validator = osdValidators[validatorName](ngFormCtrl, attr, $scope.attrs);
                 }
 
-                submitCtrl.addFieldValidator(attr, $scope.validator);
+                submitCtrl.addFieldValidator(attr, validator);
             }
         };
     }
