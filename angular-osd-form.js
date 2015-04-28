@@ -1,6 +1,31 @@
 (function () {
 
     // @ngInject
+    function OsdFormConfig() {
+        var self = this;
+        var config = {
+            useBootstrap: false,
+            useSemanticUi: true
+        };
+
+        self.useBootstrap = function () {
+            config.useBootstrap = true;
+            config.useSemanticUi = !config.useBootstrap;
+        };
+
+        self.useSemanticUi = function () {
+            config.useSemanticUi = true;
+            config.useBootstrap = !config.useSemanticUi;
+        };
+
+        self.$get = function () {
+            return config;
+        };
+
+        return self;
+    }
+
+    // @ngInject
     function OsdSubmitCtrl($rootScope, $scope) {
         var self = this;
         var ngFormCtrl = null;
@@ -201,9 +226,9 @@
     }
 
     // @ngInject
-    function osdField() {
+    function osdField(OsdFormConfig) {
         return {
-            restrict: 'E',
+            restrict: 'EA',
             replace: true,
             transclude: true,
 
@@ -211,9 +236,13 @@
                 attr: '@'
             },
 
-            template: '<div class="form-group" ng-class="{ \'has-error\': showError() }">' +
-            '<div ng-transclude></div>' +
-            '</div>',
+            template: OsdFormConfig.isBoostrap ?
+                '<div class="form-group" ng-class="{ \'has-error\': showError() }">' +
+                    '<div ng-transclude></div>' +
+                '</div>' :
+                '<div class="field" ng-class="{ \'error\': showError() }">' +
+                    '<div ng-transclude></div>' +
+                '</div>',
 
             require: '^osdSubmit',
             controller: 'OsdFieldCtrl',
@@ -225,9 +254,9 @@
     }
 
     // @ngInject
-    function osdError(osdValidators) {
+    function osdError(OsdFormConfig, osdValidators) {
         return {
-            restrict: 'E',
+            restrict: 'EA',
             replace: true,
 
             scope: {
@@ -237,7 +266,9 @@
                 validator: '&'
             },
 
-            template: '<span class="help-block" ng-show="showError()">{{ msg }}</span>',
+            template: OsdFormConfig.isBoostrap ?
+                '<span class="help-block" ng-if="showError()">{{ $parent.msg }}</span>' :
+                '<span class="ui red pointing prompt label transition visible" ng-if="showError()">{{ $parent.msg }}</span>',
 
             require: [
                 '^osdField',
@@ -336,6 +367,7 @@
     }
 
     angular.module('osdForm', [])
+        .provider('OsdFormConfig', OsdFormConfig)
         .controller('OsdSubmitCtrl', OsdSubmitCtrl)
         .controller('OsdFieldCtrl', OsdFieldCtrl)
         .service('osdValidators', osdValidators)
