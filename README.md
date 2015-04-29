@@ -147,7 +147,12 @@ The following multi-field validators are available:
  - strictMatchValidator()
  - strictIncreaseValidator()
 
+### Bootstrap vs. Semantic UI
+By default the project supports Bootstrap but you can change to using Semantic UI by injecting the OsdFormConfigProvider into your app's config and calling:
 
+```js
+OsdFormConfigProvider.useSemanticUi();
+```
 
 
 ### License
