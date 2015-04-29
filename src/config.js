@@ -9,13 +9,13 @@
         };
 
         self.useBootstrap = function () {
-            config.useBootstrap = true;
-            config.useSemanticUi = !config.useBootstrap;
+            self.config.useBootstrap = true;
+            self.config.useSemanticUi = !self.config.useBootstrap;
         };
 
         self.useSemanticUi = function () {
-            config.useSemanticUi = true;
-            config.useBootstrap = !config.useSemanticUi;
+            self.config.useSemanticUi = true;
+            self.config.useBootstrap = !self.config.useSemanticUi;
         };
 
         self.$get = function () {
