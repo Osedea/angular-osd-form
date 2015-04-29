@@ -19,7 +19,7 @@
         };
 
         self.$get = function () {
-            return config;
+            return self;
         };
 
         return self;
