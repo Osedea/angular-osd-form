@@ -236,7 +236,7 @@
                 attr: '@'
             },
 
-            template: OsdFormConfig.isBoostrap ?
+            template: OsdFormConfig.isBootstrap ?
                 '<div class="form-group" ng-class="{ \'has-error\': showError() }">' +
                     '<div ng-transclude></div>' +
                 '</div>' :
@@ -266,7 +266,7 @@
                 validator: '&'
             },
 
-            template: OsdFormConfig.isBoostrap ?
+            template: OsdFormConfig.isBootstrap ?
                 '<span class="help-block" ng-if="showError()">{{ $parent.msg }}</span>' :
                 '<span class="ui red pointing prompt label transition visible" ng-if="showError()">{{ $parent.msg }}</span>',
 
