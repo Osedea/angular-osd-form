@@ -4,8 +4,8 @@
     function OsdFormConfig() {
         var self = this;
         var config = {
-            useBootstrap: false,
-            useSemanticUi: true
+            useBootstrap: true,
+            useSemanticUi: false
         };
 
         self.useBootstrap = function () {
