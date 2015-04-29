@@ -1,4 +1,5 @@
 var gulp = require('gulp'),
+    concat = require('gulp-concat'),
     uglify = require('gulp-uglify'),
     rename = require('gulp-rename'),
     ngAnnotate = require('gulp-ng-annotate'),
@@ -8,12 +9,19 @@ var isTravis = process.env.TRAVIS || false;
 
 var paths = {
     js: [
-        './angular-osd-form.js',
+        './src/app.js',
+        './src/config.js',
+        './src/controllers/osd-submit.js',
+        './src/controllers/osd-field.js',
+        './src/validators/osd-validators.js',
+        './src/directives/osd-error.js',
+        './src/directives/osd-field.js',
+        './src/directives/osd-submit.js',
     ],
     test: [
         'node_modules/angular/angular.js',
         'node_modules/angular-mocks/angular-mocks.js',
-        'angular-osd-form.js',
+        './src/**/*.js',
         './test/**/*.js',
     ]
 };
@@ -24,6 +32,7 @@ gulp.task('build', ['js']);
 
 gulp.task('js', function() {
     return gulp.src(paths.js)
+        .pipe(concat('app.min.js'))
         .pipe(rename('angular-osd-form.min.js'))
         .pipe(ngAnnotate())
         .pipe(uglify())

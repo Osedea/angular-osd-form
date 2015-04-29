@@ -1,6 +1,3 @@
-// Karma configuration
-// Generated on Wed Mar 11 2015 20:15:56 GMT-0400 (EDT)
-
 module.exports = function (config) {
     config.set({
 
@@ -14,7 +11,7 @@ module.exports = function (config) {
         // list of files / patterns to load in the browser
         files: [
             'node_modules/karma-phantomjs-launcher/index.js',
-            'angular-osd-form.js',
+            './src/*.js',
             'test/**/*.js'
         ],
 
