@@ -9,7 +9,7 @@ This module provides easy form validation in AngularJS. There are three directiv
   - osd-error (displays error messages for invalid fields)
 
 ### Version
-0.1.13
+0.1.14
 
 ### Installation and Setup
 
