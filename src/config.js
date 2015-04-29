@@ -3,7 +3,7 @@
     // @ngInject
     function OsdFormConfig() {
         var self = this;
-        var config = {
+        self.config = {
             useBootstrap: true,
             useSemanticUi: false
         };

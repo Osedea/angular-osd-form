@@ -13,7 +13,7 @@
                 validator: '&'
             },
 
-            template: OsdFormConfig.useBootstrap ?
+            template: OsdFormConfig.config.useBootstrap ?
                 '<span class="help-block" ng-if="showError()">{{ $parent.msg }}</span>' :
                 '<span class="ui red pointing prompt label transition visible" ng-if="showError()">{{ $parent.msg }}</span>',
 

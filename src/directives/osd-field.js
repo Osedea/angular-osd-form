@@ -11,7 +11,7 @@
                 attr: '@'
             },
 
-            template: OsdFormConfig.useBootstrap ?
+            template: OsdFormConfig.config.useBootstrap ?
                 '<div class="form-group" ng-class="{ \'has-error\': showError() }">' +
                     '<div ng-transclude></div>' +
                 '</div>' :
