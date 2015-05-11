@@ -62,7 +62,7 @@
         self.validateFields = function () {
             var result = true;
 
-            self.validators.forEach(function (validator) {
+            angular.forEach(self.validators, function (validator) {
                 if (!validator.fn({key: validator.attr})) {
                     ngFormCtrl[validator.attr].$error.validator = true;
                     result = false;
