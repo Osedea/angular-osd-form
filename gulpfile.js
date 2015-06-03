@@ -19,8 +19,9 @@ var paths = {
         './src/directives/osd-submit.js',
     ],
     test: [
-        'node_modules/angular/angular.js',
-        'node_modules/angular-mocks/angular-mocks.js',
+        './node_modules/angular/angular.js',
+        './node_modules/angular-mocks/angular-mocks.js',
+        './bower_components/ng-lodash/build/ng-lodash.js',
         './src/**/*.js',
         './test/**/*.js',
     ]
@@ -30,27 +31,28 @@ gulp.task('default', ['watch']);
 
 gulp.task('build', ['js']);
 
-gulp.task('js', function() {
+gulp.task('js', function () {
     return gulp.src(paths.js)
-        .pipe(concat('app.min.js'))
-        .pipe(rename('angular-osd-form.min.js'))
+        .pipe(concat('angular-osd-form.js'))
+        .pipe(gulp.dest('./'))
         .pipe(ngAnnotate())
         .pipe(uglify())
+        .pipe(rename({ extname: '.min.js' }))
         .pipe(gulp.dest('./'));
 });
 
-gulp.task('watch', ['build'], function() {
+gulp.task('watch', ['build'], function () {
     gulp.watch(paths.js, ['js', 'test']);
 });
 
-gulp.task('test', function() {
+gulp.task('test', function () {
     return gulp.src(paths.test)
         .pipe(karma({
             configFile: 'karma.conf.js',
             action: isTravis ? 'run' : 'watch',
             singleRun: isTravis,
         }))
-        .on('error', function(err) {
+        .on('error', function (err) {
             throw err;
         });
 });

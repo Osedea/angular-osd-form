@@ -1,0 +1,20 @@
+{
+  "name": "angular-osd-form",
+  "main": "angular-osd-form.js",
+  "version": "0.1.22",
+  "homepage": "https://github.com/Osedea/angular-osd-form",
+  "authors": [
+    "Osedea"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "ng-lodash": "~0.2.3"
+  }
+}

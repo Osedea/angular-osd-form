@@ -1,7 +1,7 @@
 (function () {
 
     // @ngInject
-    function OsdSubmitCtrl($rootScope, $scope) {
+    function OsdSubmitCtrl($rootScope, $scope, lodash) {
         var self = this;
         var ngFormCtrl = null;
 
@@ -62,7 +62,7 @@
         self.validateFields = function () {
             var result = true;
 
-            angular.forEach(self.validators, function (validator) {
+            lodash.forEach(self.validators, function (validator) {
                 if (!validator.fn({key: validator.attr})) {
                     ngFormCtrl[validator.attr].$error.validator = true;
                     result = false;
@@ -89,13 +89,18 @@
             }
 
             if (errorType !== 'validator') {
-                return (errorType in ngFormCtrl[attr].$error) && ngFormCtrl[attr].$error[errorType];
+                return ngFormCtrl[attr] &&
+                        ngFormCtrl[attr].$error &&
+                        lodash.has(ngFormCtrl[attr].$error, errorType) &&
+                        ngFormCtrl[attr].$error[errorType];
             }
 
             // Loop through validators and check for matching attribute. If
             // attribute matches, check if validator passes.
-            return self.validators.some(function (validator) {
-                if (validator.attr !== attr) return false;
+            return lodash.some(self.validators, function (validator) {
+                if (validator.attr !== attr) {
+                    return false;
+                }
                 var validatorSuccess = validator.fn({ key: attr });
 
                 ngFormCtrl[validator.attr].$error.validator = !validatorSuccess;
@@ -127,4 +132,4 @@
 
     angular.module('osdForm')
         .controller('OsdSubmitCtrl', OsdSubmitCtrl);
-})();
+}());
