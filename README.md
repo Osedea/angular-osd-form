@@ -9,7 +9,7 @@ This module provides easy form validation in AngularJS. There are three directiv
   - osd-error (displays error messages for invalid fields)
 
 ### Version
-0.1.24
+0.1.25
 
 ### Installation and Setup
 
@@ -30,8 +30,9 @@ angular.module(
     )
 ```
 
-Include a script tag (or add it to whatever you use to compile your js):
+Include a script tag for ng-lodash and osd-form (or add them to whatever you use to compile your js):
 ```html
+<script src="path/to/bower_components/ng-lodash/build/ng-lodash.js"></script>
 <script src="path/to/bower_components/angular-osd-form/angular-osd-form.min.js"></script>
 ```
 
